@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# 
-# tournament.py -- implementation of a Swiss-system tournament
-#
+ 
+ #tournament.py -- implementation of a Swiss-system tournament
+
 
 import psycopg2
 
@@ -9,22 +9,22 @@ import psycopg2
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
     return psycopg2.connect("dbname=tournament")
-
+	
 def commandExe(command):
-	c = connect()
-	cursor = c.cursor()
-	cursor.execute(command)
-	c.commit()
-	c.close()
+	conn = connect()
+	curs = conn.cursor()
+	curs.execute(command)
+	conn.commit()
 
 def deleteMatches():
-    """Remove all the match records from the database."""
-    commandExe("Delete * From matches;")
+	"""Remove all the match records from the database."""
+	commandExe("Delete FROM matches")
+	
 	
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    commandExe("Delete * From players;")
+    commandExe("Delete From players")
 
 
 def countPlayers():
@@ -82,5 +82,6 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+
 
 
