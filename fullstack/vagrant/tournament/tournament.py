@@ -9,37 +9,52 @@ import psycopg2
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
     return psycopg2.connect("dbname=tournament")
-	
-def commandExe(command):
-	conn = connect()
-	curs = conn.cursor()
-	curs.execute(command)
-	conn.commit()
+
+# Calls the connect method to connect to database runs command and commits change
+# Method used for obtaining , committing to and closing  db tournament 	
 
 def deleteMatches():
 	"""Remove all the match records from the database."""
-	commandExe("Delete FROM matches")
-	
+	conn = connect()
+	curs = conn.cursor()
+	curs.execute("Delete FROM matches")
+	conn.commit()
+	conn.close()
+
 	
 
 def deletePlayers():
-    """Remove all the player records from the database."""
-    commandExe("Delete From players")
+	conn = connect()
+	curs = conn.cursor()
+	curs.execute("Delete FROM players")
+	conn.commit()
+	conn.close()
 
 
 def countPlayers():
-    """Returns the number of players currently registered."""
-
-
+	"""Returns the number of players currently registered."""
+	conn = connect()
+	curs = conn.cursor()
+	curs.execute("Select Count(*) As Registered_Players From (Select * From players) as foo")
+	test = curs.fetchone()
+	print test
+	conn.commit()
+	conn.close()
+	
+	
 def registerPlayer(name):
-    """Adds a player to the tournament database.
-  
-    The database assigns a unique serial id number for the player.  (This
-    should be handled by your SQL database schema, not in your Python code.)
-  
-    Args:
-      name: the player's full name (need not be unique).
-    """
+	"""Adds a player to the tournament database.
+  	The database assigns a unique serial id number for the player.  (This
+	should be handled by your SQL database schema, not in your Python code.)
+  	Args:
+	name: the player's full name (need not be unique).
+	"""
+	conn = connect()
+	curs = conn.cursor()
+	curs.execute("Insert Into players Values(%s)" (name,))
+	conn.commit()
+	conn.close()
+	
 	
 
 
