@@ -5,12 +5,12 @@ DROP TABLE players;
 DROP TABLE matches;
 
 CREATE TABLE players(
-player_ID int,
+player_ID SERIAL NOT NULL PRIMARY KEY,
 player_Name varchar(25)
 );
 
 CREATE TABLE matches(
-match_ID int,
+match_ID SERIAL NOT NULL PRIMARY KEY,
 winner_ID int,
 loser_ID int
 );
