@@ -36,10 +36,8 @@ def countPlayers():
 	conn = connect()
 	curs = conn.cursor()
 	curs.execute("Select Count(*) As Registered_Players From (Select * From players) as foo")
-	test = curs.fetchone()
-	print test
-	conn.commit()
-	conn.close()
+	RegPlayers = curs.fetchone()[0]
+	return RegPlayers
 	
 	
 def registerPlayer(name):
@@ -51,7 +49,7 @@ def registerPlayer(name):
 	"""
 	conn = connect()
 	curs = conn.cursor()
-	curs.execute("Insert Into players Values(%s)" (name,))
+	curs.execute("Insert Into players(player_name) Values('%s')" %(name,))
 	conn.commit()
 	conn.close()
 	
