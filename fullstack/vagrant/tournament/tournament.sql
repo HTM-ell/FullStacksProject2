@@ -22,16 +22,26 @@ loser int
 CREATE VIEW playerStats
 AS
 SELECT p.player_ID, m.winner, m.loser, m.match_ID 
-from matches m Right Outer Join players p  On p.player_ID=m.loser;
+from matches m 
+Right Outer Join players p  On p.player_ID=m.loser And p.player_ID=m.winner;
 
 CREATE VIEW playersWins
 AS
-select player_Id, Count(winner = player_id) as WinCount 
+select player_Id, Count(player_ID = winner) as WinCount 
 from playerstats Group By player_ID;
 
 CREATE VIEW matchesPlayed
 AS
-SELECT player_ID, Count(match_ID) as matchesPlayed From playerStats Group BY player_ID;
+SELECT player_ID, Count(match_ID) as matchesPlayed 
+From playerStats Group BY player_ID;
+
+CREATE VIEW playerStandings
+AS
+Select p.player_ID, p.player_name, w.WinCount, mp.matchesPlayed From players p 
+join playersWins w ON p.player_ID = w.player_ID 
+join matchesPlayed mp ON w.player_ID = mp.player_ID;
+
+
 
 
 

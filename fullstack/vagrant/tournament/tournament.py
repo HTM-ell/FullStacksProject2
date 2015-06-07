@@ -38,6 +38,7 @@ def countPlayers():
 	curs.execute("Select Count(*) As Registered_Players From (Select * From players) as foo")
 	RegPlayers = curs.fetchone()[0]
 	return RegPlayers
+	conn.close()
 	
 	
 def registerPlayer(name):
@@ -49,7 +50,7 @@ def registerPlayer(name):
 	"""
 	conn = connect()
 	curs = conn.cursor()
-	curs.execute("Insert Into players(player_name) Values('%s')" %(name,))
+	curs.execute("Insert Into players(player_name) Values(%s)" ,(name,))
 	conn.commit()
 	conn.close()
 	
@@ -57,30 +58,24 @@ def registerPlayer(name):
 
 
 def playerStandings():
-    """Returns a list of the players and their win records, sorted by wins.  The first entry in the list should be the player in first place, or a player
-    tied for first place if there is currently a tie.
-	Returns:
-    A list of tuples, each of which contains (id, name, wins, matches):
-        id: the player's unique id (assigned by the database)
-        name: the player's full name (as registered)
-        wins: the number of matches the player has won
-        matches: the number of matches the player has played"""
+
 	conn = connect()
 	curs = conn.cursor()
-	curs.execute('''''')
-	test = curs.fetchall()
-	print test
+	curs.execute("Select * From playerStandings ORDER BY winCount, player_name")
+	standings = curs.fetchall()
+	return standings
+	conn.close()
 	
 	
 
 
 def reportMatch(winner, loser):
-    """Records the outcome of a single match between two players.
-
-    Args:
-      winner:  the id number of the player who won
-      loser:  the id number of the player who lost
-    """
+    
+	conn = connect()
+	curs = conn.cursor()
+	curs.execute("Insert Into matches(winner, loser) Values(%s,%s)", (winner,loser,))
+	conn.commit()
+	conn.close()
  
  
 def swissPairings():
