@@ -23,7 +23,7 @@ CREATE VIEW playerStats
 AS
 SELECT p.player_ID, m.winner, m.loser, m.match_ID 
 from matches m 
-Right Outer Join players p  On p.player_ID=m.loser And p.player_ID=m.winner;
+Right Outer Join players p  On p.player_ID=m.loser OR p.player_ID=m.winner;
 
 CREATE VIEW playersWins
 AS
