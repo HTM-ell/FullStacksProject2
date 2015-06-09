@@ -19,26 +19,26 @@ match_ID SERIAL NOT NULL PRIMARY KEY,
 winner int ,
 loser int
 );
-CREATE VIEW playerStats
+CREATE VIEW playersStats
 AS
 SELECT p.player_ID, m.winner, m.loser, m.match_ID 
 from matches m 
 Right Outer Join players p  On p.player_ID=m.loser OR p.player_ID=m.winner;
 
-CREATE VIEW playersWins
-AS
-select player_Id, Count(player_ID = winner) as WinCount 
-from playerstats Group By player_ID;
-
 CREATE VIEW matchesPlayed
 AS
 SELECT player_ID, Count(match_ID) as matchesPlayed 
-From playerStats Group BY player_ID;
+From playersStats Group BY player_ID;
+
+CREATE VIEW matchesWon
+AS
+Select player_ID, Count(Distinct match_ID) As matchesWon From (Select a.player_ID, b.match_id
+From playersStats a Left Outer Join playersStats b On a.player_ID = b.winner) as foo Group By player_ID;
 
 CREATE VIEW playerStandings
 AS
-Select p.player_ID, p.player_name, w.WinCount, mp.matchesPlayed From players p 
-join playersWins w ON p.player_ID = w.player_ID 
+Select p.player_ID, p.player_name, w.matchesWon, mp.matchesPlayed From players p 
+join matchesWon w On p.player_ID = w.player_ID 
 join matchesPlayed mp ON w.player_ID = mp.player_ID;
 
 

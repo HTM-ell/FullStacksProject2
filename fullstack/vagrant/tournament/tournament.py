@@ -61,7 +61,7 @@ def playerStandings():
 
 	conn = connect()
 	curs = conn.cursor()
-	curs.execute("Select * From playerStandings ORDER BY winCount, player_name")
+	curs.execute("Select * From playerStandings ORDER BY matchesWon, player_name")
 	standings = curs.fetchall()
 	return standings
 	conn.close()
@@ -70,7 +70,7 @@ def playerStandings():
 
 
 def reportMatch(winner, loser):
-    
+   
 	conn = connect()
 	curs = conn.cursor()
 	curs.execute("Insert Into matches(winner, loser) Values(%s,%s)", (winner,loser,))
