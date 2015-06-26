@@ -26,8 +26,6 @@ winner int references players(player_id),
 loser int references players(player_id)
 );
 
-CREATE TABLE swiss_pairings
-
 -- View that shows a player's ID number, match_id and the winner and or loser of that match ID
 
 CREATE VIEW players_stats
@@ -54,9 +52,5 @@ CREATE VIEW player_standings
 AS
 Select p.player_id, p.player_name, w.won_matches, mp.played_matches From players p 
 join matches_won w On p.player_id = w.player_id 
-join matches_played mp ON w.player_id = mp.player_id; 
-
--- View that shows the pairings for a particular round of matches. 
-CREATE VIEW swiss_pairings
-AS
-select p1.player_id as P1_ID , p1.player_name AS P1_Name , p2.player_id as P2_ID, p2.player_name as P2_Name From player_standings p1
+join matches_played mp ON w.player_id = mp.player_id 
+Order by w.won_matches, mp.played_matches; 
