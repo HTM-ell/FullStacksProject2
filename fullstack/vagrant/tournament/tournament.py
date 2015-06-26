@@ -36,7 +36,7 @@ def countPlayers():
 	"""Returns the number of players currently registered."""
 	conn = connect()
 	curs = conn.cursor()
-	curs.execute("Select Count(*) As registered_players From players as in_tournament")
+	curs.execute("Select Count(*) From players")
 	RegPlayers = curs.fetchone()[0]
 	return RegPlayers
 	conn.close()
@@ -91,25 +91,16 @@ def swissPairings():
     #   name1: the first player's name
     #    id2: the second player's unique id
     #   name2: the second player's name1
-	afterPairing = []
-	
-	conn = connect()
-	curs = conn.cursor()
-	curs.execute("Select * from player_standings")
-	beforePairing = curs.fetchall()
-	for index in range(len(beforePairing)):
-	
-		if(beforePairing[index][3] == beforePairing[index+1][3]):
-			if(beforePairing[2] == beforePairing[index+1][2]):
-				afterPairing[index].append(beforePairing[index][0],beforePairing[index][1],beforePairing[index+i][0],beforePairing[index+i][1])
-				beforePairing.remove(index)
-				beforePairing.remove(index+i)
-	print afterPairing
-			
-		
-	return afterPairing
-	conn.close()
-	
 
+	beforePairing = playerStandings()
+	afterPairing =[]
+	
+	for i in range(1, len(beforePairing),2):
+		player1 = beforePairing[i - 1]
+		player2 = beforePairing[i]
+		afterPairing.append((player1[0:2] + player2[0:2]))
+	
+	return afterPairing
+	
 
 
