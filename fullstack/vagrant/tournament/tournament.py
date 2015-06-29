@@ -6,40 +6,44 @@
 import psycopg2
 
 
-def connect():
-    """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
+def connect(database_name="tournament"):
+    try:
+        db = psycopg2.connect("dbname={}".format(database_name))
+        cursor = db.cursor()
+        return db, cursor
+    except:
+        print("<error message>")
 
 # Calls the connect method to connect to database runs command and commits change
 # Method used for obtaining , committing to and closing  db tournament 	
 
 def deleteMatches():
 	"""Remove all the match records from the database."""
-	conn = connect()
-	curs = conn.cursor()
-	curs.execute("Delete FROM matches")
-	conn.commit()
-	conn.close()
+	db, cursor = connect()
+	query = "Delete FROM matches;"
+	cursor.execute(query)
+	db.commit()
+	db.close()
 
 	
 
 def deletePlayers():
 	"""Remove all the players records from the database."""
-	conn = connect()
-	curs = conn.cursor()
-	curs.execute("Delete FROM players")
-	conn.commit()
-	conn.close()
+	db, cursor = connect()
+	query = "Delete FROM players;"
+	cursor.execute(query)
+	db.commit()
+	db.close()
 
 
 def countPlayers():
 	"""Returns the number of players currently registered."""
-	conn = connect()
-	curs = conn.cursor()
-	curs.execute("Select Count(*) From players")
-	RegPlayers = curs.fetchone()[0]
+	db, cursor = connect()
+	query = "Select Count(*) From players;"
+	cursor.execute(query)
+	RegPlayers = cursor.fetchone()[0]
 	return RegPlayers
-	conn.close()
+	db.close()
 	
 	
 def registerPlayer(name):
@@ -49,34 +53,36 @@ def registerPlayer(name):
   	Args:
 	name: the player's full name (need not be unique).
 	"""
-	conn = connect()
-	curs = conn.cursor()
-	curs.execute("Insert Into players(player_name) Values(%s)" ,(name,))
-	conn.commit()
-	conn.close()
-	
-	
+	db, cursor = connect()
 
+	query = "Insert Into players(player_name) Values(%s);"
+	parameter = (name,)
+	cursor.execute(query, parameter)
+
+	db.commit()
+	db.close()
+	
 
 def playerStandings():
 
-	conn = connect()
-	curs = conn.cursor()
-	curs.execute("Select * From player_standings")
-	standings = curs.fetchall()
+	db, cursor = connect()
+	query = "Select * From player_standings;"
+	cursor.execute(query)
+	standings = cursor.fetchall()
 	return standings
-	conn.close()
+	db.close()
 	
 	
 
 
 def reportMatch(winner, loser):
    
-	conn = connect()
-	curs = conn.cursor()
-	curs.execute("Insert Into matches(winner, loser) Values(%s,%s)", (winner,loser,))
-	conn.commit()
-	conn.close()
+	db, cursor = connect()
+	query = ("Insert Into matches(winner, loser) Values(%s,%s)")
+	parameter = (winner,loser,) 
+	cursor.execute(query, parameter)
+	db.commit()
+	db.close()
  
  
 def swissPairings():
