@@ -26,4 +26,4 @@ Once in the python commandline type:
 import tournament as t
 Use the following syntax to execute functions with in the tournament.py file
 
-t.swissPairing()
+t.swissPairings()
