@@ -12,15 +12,15 @@ def connect(database_name="tournament"):
         cursor = db.cursor()
         return db, cursor
     except:
-        print("<error message>")
+        print("Please check the try block for errors")
 
 # Calls the connect method to connect to database runs command and commits change
 # Method used for obtaining , committing to and closing  db tournament 	
 
 def deleteMatches():
-	"""Remove all the match records from the database."""
+	"""Remove all the match records FROM the database."""
 	db, cursor = connect()
-	query = "Delete FROM matches;"
+	query = "DELETE FROM matches;"
 	cursor.execute(query)
 	db.commit()
 	db.close()
@@ -28,9 +28,9 @@ def deleteMatches():
 	
 
 def deletePlayers():
-	"""Remove all the players records from the database."""
+	"""Remove all the players records FROM the database."""
 	db, cursor = connect()
-	query = "Delete FROM players;"
+	query = "DELETE FROM players;"
 	cursor.execute(query)
 	db.commit()
 	db.close()
@@ -39,12 +39,11 @@ def deletePlayers():
 def countPlayers():
 	"""Returns the number of players currently registered."""
 	db, cursor = connect()
-	query = "Select Count(*) From players;"
+	query = "SELECT COUNT(*) FROM players;"
 	cursor.execute(query)
 	RegPlayers = cursor.fetchone()[0]
-	return RegPlayers
 	db.close()
-	
+	return RegPlayers
 	
 def registerPlayer(name):
 	"""Adds a player to the tournament database.
@@ -55,7 +54,7 @@ def registerPlayer(name):
 	"""
 	db, cursor = connect()
 
-	query = "Insert Into players(player_name) Values(%s);"
+	query = "INSERT INTO players(player_name) VALUES(%s);"
 	parameter = (name,)
 	cursor.execute(query, parameter)
 
@@ -66,19 +65,18 @@ def registerPlayer(name):
 def playerStandings():
 
 	db, cursor = connect()
-	query = "Select * From player_standings;"
+	query = "SELECT * FROM player_standings;"
 	cursor.execute(query)
 	standings = cursor.fetchall()
-	return standings
 	db.close()
-	
+	return standings
 	
 
 
 def reportMatch(winner, loser):
    
 	db, cursor = connect()
-	query = ("Insert Into matches(winner, loser) Values(%s,%s)")
+	query = ("INSERT INTO matches(winner, loser) VALUES(%s,%s)")
 	parameter = (winner,loser,) 
 	cursor.execute(query, parameter)
 	db.commit()

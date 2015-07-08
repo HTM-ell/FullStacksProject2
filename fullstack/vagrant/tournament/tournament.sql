@@ -31,26 +31,26 @@ loser int references players(player_id)
 CREATE VIEW players_stats
 AS
 SELECT p.player_id, m.winner, m.loser, m.match_id 
-from matches m 
-Right Outer Join players p  On p.player_id=m.loser OR p.player_id=m.winner;
+FROM matches m 
+RIGHT OUTER JOIN players p  On p.player_id=m.loser OR p.player_id=m.winner;
 
 
--- View that shows the number of matches that were played by a particular player ID
+-- View that shows the number of matches that were played BY a particular player ID
 CREATE VIEW matches_played
 AS
-SELECT player_id, Count(match_id) as played_matches
-From players_stats Group BY player_id Order by player_id;
+SELECT player_id, COUNT(match_id) as played_matches
+FROM players_stats GROUP BY player_id ORDER BY player_id;
 
 --  View that shows the number of matches one per player ID
 CREATE VIEW matches_won
 AS
-Select player_id, Count(Distinct match_id) As won_matches From (Select a.player_id, b.match_id
-From players_stats a Left Outer Join players_stats b On a.player_id = b.winner) as combplayer_match Group By player_id;
+SELECT player_id, COUNT(Distinct match_id) As won_matches FROM (SELECT a.player_id, b.match_id
+FROM players_stats a LEFT OUTER JOIN players_stats b On a.player_id = b.winner) as combplayer_match GROUP BY player_id;
 
 -- View that shows the name of a player, the number of matches they have won and played collectively per Player ID
 CREATE VIEW player_standings
 AS
-Select p.player_id, p.player_name, w.won_matches, mp.played_matches From players p 
-join matches_won w On p.player_id = w.player_id 
-join matches_played mp ON w.player_id = mp.player_id 
-Order by w.won_matches, mp.played_matches; 
+SELECT p.player_id, p.player_name, w.won_matches, mp.played_matches FROM players p 
+JOIN matches_won w On p.player_id = w.player_id 
+JOIN matches_played mp ON w.player_id = mp.player_id 
+ORDER BY w.won_matches, mp.played_matches; 
